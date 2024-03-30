@@ -1,0 +1,90 @@
+name: Publish Project Snapshot
+
+on:
+  push:
+    branches:
+      - 'master'
+  schedule:
+    - cron: '0 3 * * 1,4'
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+      OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+      SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
+      SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
+      SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Write Gradle build properties to `~/.gradle/gradle.properties`
+        run: |
+          mkdir -p ~/.gradle
+          printf "org.gradle.jvmargs=-Xmx3G -XX:+UseParallelGC\n" >> ~/.gradle/gradle.properties
+          printf "org.gradle.vfs.watch=false\n" >> ~/.gradle/gradle.properties
+          printf "org.gradle.parallel=false\n" >> ~/.gradle/gradle.properties
+        shell: bash
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - name: Build app with Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - run: ./gradlew assemble
+
+      - name: Unwrap GPG key
+        env:
+          GPG_KEY_CONTENTS: ${{ secrets.GPG_KEY_CONTENTS }}
+          SIGNING_SECRET_KEY_RING_FILE: ${{ secrets.SIGNING_SECRET_KEY_RING_FILE }}
+        run: sudo bash -c "echo '$GPG_KEY_CONTENTS' | base64 -d > '$SIGNING_SECRET_KEY_RING_FILE'"
+
+      - name: Publish to Github Package Registry
+        run: ./gradlew publishAllPublicationsToGithubRepository
+
+  diffuse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Write Gradle build properties to `~/.gradle/gradle.properties`
+        run: |
+          mkdir -p ~/.gradle
+          printf "org.gradle.jvmargs=-Xmx3G -XX:+UseParallelGC\n" >> ~/.gradle/gradle.properties
+          printf "org.gradle.vfs.watch=false\n" >> ~/.gradle/gradle.properties
+        shell: bash
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v3
+
+      - run: ./gradlew assemble -PskipJarVersion
+
+      - name: Upload diffuse base artifact
+        uses: actions/cache@v4
+        with:
+          path: diffuse-base-file
+          key: diffuse-${{ github.sha }}
+
+      - name: Check size
+        run: du -h maven-sympathy/build/libs/maven-sympathy.jar
+        shell: bash
+
+      - name: Copy diffuse base artifact to be picked by cache save
+        run: cp maven-sympathy/build/libs/maven-sympathy.jar diffuse-base-file
+        shell: bash
