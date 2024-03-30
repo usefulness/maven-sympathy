@@ -27,7 +27,7 @@ gradlePlugin {
             id = "io.github.usefulness.maven-sympathy"
             displayName = "Let's be sympathetic to Maven users"
             description = project.description
-            tags.addAll(["gradle", "plugin", "maven", "sympathy", "dependencies", "correctness"])
+            tags.addAll(["maven", "sympathy", "dependencies", "correctness"])
             implementationClass = "io.github.usefulness.mavensympathy.MavenSympathyPlugin"
         }
     }
