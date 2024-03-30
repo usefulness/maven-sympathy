@@ -1,0 +1,24 @@
+name: Setup Gradle
+description: Sets up the environment to run Gradle
+
+runs:
+  using: composite
+
+  steps:
+    - name: Write Gradle build properties to `~/.gradle/gradle.properties`
+      run: |
+        mkdir -p ~/.gradle
+        printf "org.gradle.jvmargs=-Xmx3G -XX:+UseParallelGC\n" >> ~/.gradle/gradle.properties
+        printf "org.gradle.vfs.watch=false\n" >> ~/.gradle/gradle.properties
+      shell: bash
+
+    - uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 21
+
+    - uses: gradle/wrapper-validation-action@v2
+
+    - uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-home-cache-cleanup: true # https://github.com/gradle/gradle-build-action/issues/630

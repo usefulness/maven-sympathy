@@ -25,21 +25,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Write Gradle build properties to `~/.gradle/gradle.properties`
-        run: |
-          mkdir -p ~/.gradle
-          printf "org.gradle.jvmargs=-Xmx3G -XX:+UseParallelGC\n" >> ~/.gradle/gradle.properties
-          printf "org.gradle.vfs.watch=false\n" >> ~/.gradle/gradle.properties
-          printf "org.gradle.parallel=false\n" >> ~/.gradle/gradle.properties
-        shell: bash
-
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 21
-
-      - name: Build app with Gradle
-        uses: gradle/actions/setup-gradle@v3
+      - uses: ./.github/actions/setup-gradle-build
 
       - run: ./gradlew assemble
 
@@ -59,19 +45,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Write Gradle build properties to `~/.gradle/gradle.properties`
-        run: |
-          mkdir -p ~/.gradle
-          printf "org.gradle.jvmargs=-Xmx3G -XX:+UseParallelGC\n" >> ~/.gradle/gradle.properties
-          printf "org.gradle.vfs.watch=false\n" >> ~/.gradle/gradle.properties
-        shell: bash
-
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 21
-
-      - uses: gradle/actions/setup-gradle@v3
+      - uses: ./.github/actions/setup-gradle-build
 
       - run: ./gradlew assemble -PskipJarVersion
 
