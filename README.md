@@ -7,8 +7,42 @@
 https://jakewharton.com/nonsensical-maven-is-still-a-gradle-problem/
 
 
+### Usage:
 ```groovy
 plugins {
     id("io.github.usefulness.maven-sympathy") version "{{version}}"
 }
 ```
+
+<details>
+<summary>Version Catalog entry</summary>
+
+```toml
+usefulness-maven-sympathy = { id = "io.github.usefulness.maven-sympathy", version = "{{version}}" }
+```
+</details>
+
+From now on, the `sympathyForMrMaven` will run on every `check` task invocation. 
+
+#### Advanced configuration
+<details open>
+<summary>Groovy</summary>
+
+```groovy
+tasks.named("sympathyForMrMaven") {
+    behaviorOnFailure = BehaviorOnFailure.Fail
+}
+```
+</details>
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+tasks.named<io.github.usefulness.mavensympathy.SympathyForMrMavenTask>("sympathyForMrMaven") {
+    behaviorOnFailure = BehaviorOnFailure.Fail
+}
+```
+</details>
+
+`behaviorOnFailure` - one of `Fail` (prints error logs + fails the build) or `Warn` (only prints error logs)  
