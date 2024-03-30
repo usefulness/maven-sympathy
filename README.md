@@ -5,3 +5,10 @@
 ![Maven Central](https://img.shields.io/maven-central/v/io.github.usefulness/maven-sympathy)
 
 https://jakewharton.com/nonsensical-maven-is-still-a-gradle-problem/
+
+
+```groovy
+plugins {
+    id("io.github.usefulness.maven-sympathy") version "{{version}}"
+}
+```
