@@ -70,7 +70,54 @@ class IntegrationTest {
     }
 
     @Test
-    fun ownUpgrade() {
+    fun boms() {
+        rootDirectory.resolve("build.gradle") {
+            // language=groovy
+            writeText(
+                """
+                plugins {
+                    id("java-library")
+                    id("io.github.usefulness.maven-sympathy")
+                }
+                
+                dependencies {
+                    implementation(platform("com.squareup.retrofit2:retrofit-bom:2.11.0") )
+                    implementation("com.squareup.retrofit2:retrofit")
+                    implementation("com.squareup.retrofit2:converter-jackson")
+                    implementation("com.squareup.okhttp3:okhttp:3.14.8")
+                }
+                """.trimIndent(),
+            )
+        }
+        val result = runGradle(projectDir = rootDirectory, shouldFail = true)
+        assertThat(result.output).contains("dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9")
+        assertThat(result.task(":sympathyForMrMaven")?.outcome).isEqualTo(TaskOutcome.FAILED)
+
+        rootDirectory.resolve("build.gradle") {
+            // language=groovy
+            writeText(
+                """
+                plugins {
+                    id("java-library")
+                    id("io.github.usefulness.maven-sympathy")
+                }
+                
+                dependencies {
+                    implementation(platform("com.squareup.retrofit2:retrofit-bom:2.11.0") )
+                    implementation("com.squareup.retrofit2:retrofit")
+                    implementation("com.squareup.retrofit2:converter-jackson")
+                    implementation("com.squareup.okhttp3:okhttp:3.14.9")
+                }
+                """.trimIndent(),
+            )
+        }
+        val reRunResult = runGradle(projectDir = rootDirectory)
+        assertThat(reRunResult.output).doesNotContain("changed to")
+        assertThat(reRunResult.task(":sympathyForMrMaven")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+    }
+
+    @Test
+    fun bumpViaOwnDependency() {
         rootDirectory.resolve("build.gradle") {
             // language=groovy
             writeText(
@@ -93,7 +140,7 @@ class IntegrationTest {
     }
 
     @Test
-    fun automaticBump() {
+    fun bumpViaTransitiveDependency() {
         rootDirectory.resolve("build.gradle") {
             // language=groovy
             writeText(

@@ -15,7 +15,7 @@ plugins {
 ```
 
 <details>
-<summary>Version Catalog entry</summary>
+<summary>Version Catalog</summary>
 
 ```toml
 usefulness-maven-sympathy = { id = "io.github.usefulness.maven-sympathy", version = "{{version}}" }

@@ -38,21 +38,18 @@ public open class SympathyForMrMavenTask @Inject constructor(objectFactory: Obje
         val errorMessages = mutableListOf<String>()
 
         configurationWithDependencies.get().forEach { (name, root) ->
-            root.dependencies.asSequence()
-                .filterIsInstance<ResolvedDependencyResult>()
-                .filter { it.requested is ModuleComponentSelector }
-                .forEach { rdr ->
-                    val requested = rdr.requested as? ModuleComponentSelector
-                    val selected = rdr.selected
-                    val requestedVersion = requested?.version
-                    val selectedVersion = selected.moduleVersion?.version
-                    if (!requestedVersion.isNullOrBlank() && requestedVersion != selectedVersion) {
-                        val errorMessage = "[$name] dependency $requested version changed $requestedVersion -> $selectedVersion"
-                        errorMessages.add(errorMessage)
-                        logger.error(errorMessage)
-                        fail = true
-                    }
+            root.dependencies.filterIsInstance<ResolvedDependencyResult>().forEach perDependency@{ rdr ->
+                val requested = rdr.requested as? ModuleComponentSelector ?: return@perDependency
+                val selected = rdr.selected
+                val requestedVersion = requested.version
+                val selectedVersion = selected.moduleVersion?.version
+                if (!requestedVersion.isNullOrBlank() && requestedVersion != selectedVersion) {
+                    val errorMessage = "[$name] dependency $requested version changed $requestedVersion -> $selectedVersion"
+                    errorMessages.add(errorMessage)
+                    logger.error(errorMessage)
+                    fail = true
                 }
+            }
         }
         val report = outputFile.get().asFile
         if (fail) {
