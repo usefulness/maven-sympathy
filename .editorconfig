@@ -1,0 +1,19 @@
+root = true
+
+[*]
+insert_final_newline = true
+
+[*.{kt,kts}]
+max_line_length = 140
+indent_size = 4
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true
+ktlint_code_style = intellij_idea
+ktlint_standard_property-naming = disabled
+ktlint_class_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = 2
+ktlint_function_naming_ignore_when_annotated_with = Composable
+ktlint_compose_unstable-collections = disabled
+
+[*.xml]
+indent_size = 4
+ij_xml_space_inside_empty_tag = true

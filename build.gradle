@@ -1,0 +1,25 @@
+plugins {
+    alias(libs.plugins.starter.config)
+    alias(libs.plugins.starter.versioning)
+    alias(libs.plugins.starter.library.kotlin) apply false
+}
+
+commonConfig {
+    javaVersion JavaVersion.VERSION_1_8
+}
+
+allprojects {
+    pluginManager.withPlugin("kotlin") { plugin ->
+        kotlin {
+            jvmToolchain(libs.versions.java.compilation.get().toInteger())
+        }
+    }
+    pluginManager.withPlugin("java") {
+        if (project.hasProperty("skipJarVersion")) {
+            def projectName = project.name
+            tasks.named("jar") {
+                archiveFile.set(layout.buildDirectory.map { it.file("libs/${projectName}.jar") })
+            }
+        }
+    }
+}

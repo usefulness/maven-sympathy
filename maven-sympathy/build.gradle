@@ -1,0 +1,44 @@
+plugins {
+    id("java-gradle-plugin")
+    alias(libs.plugins.gradle.pluginpublish)
+    alias(libs.plugins.starter.library.kotlin)
+    alias(libs.plugins.kotlinx.binarycompatibility)
+    alias(libs.plugins.kotlin.samwithreceiver)
+    id("com.starter.publishing")
+}
+
+samWithReceiver {
+    annotation("org.gradle.api.HasImplicitReceiver")
+}
+
+kotlin {
+    explicitApi()
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+}
+
+description = "Gradle plugin that ensures first-order dependencies select the same version as they request."
+
+gradlePlugin {
+    plugins {
+        register("mavenSympathy") {
+            id = "io.github.usefulness.maven-sympathy"
+            displayName = "Let's be sympathetic to Maven users"
+            description = project.description
+            tags.addAll(["gradle", "plugin", "maven", "sympathy", "dependencies", "correctness"])
+            implementationClass = "io.github.usefulness.mavensympathy.MavenSympathyPlugin"
+        }
+    }
+}
+
+dependencies {
+    compileOnly(libs.kotlin.gradle.api)
+
+    testRuntimeOnly(libs.junit.platform.launcher)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.assertj.core)
+}

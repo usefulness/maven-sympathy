@@ -1,0 +1,13 @@
+public final class io/github/usefulness/mavensympathy/MavenSympathyPlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public class io/github/usefulness/mavensympathy/SympathyForMrMavenTask : org/gradle/api/DefaultTask {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun getConfigurationWithDependencies ()Lorg/gradle/api/provider/MapProperty;
+	public final fun getOutputFile ()Lorg/gradle/api/file/RegularFileProperty;
+	public final fun run ()V
+}
+

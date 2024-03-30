@@ -1,0 +1,12 @@
+build
+out
+*.iws
+*.ipr
+*.iml
+TODO.md
+.idea
+.gradle
+# Gradle files
+.gradle/
+build/
+local.properties
