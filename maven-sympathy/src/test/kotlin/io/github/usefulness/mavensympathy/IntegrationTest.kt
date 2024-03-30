@@ -20,12 +20,19 @@ class IntegrationTest {
             // language=groovy
             writeText(
                 """
-                dependencyResolutionManagement {
-                    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-                    repositories {
-                        mavenCentral()
+                    pluginManagement {
+                        repositories { 
+                             mavenCentral()
+                             gradlePluginPortal()
+                        }
                     }
-                }
+                    dependencyResolutionManagement {
+                        repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+                        repositories {
+                            mavenCentral()
+                        }
+                    }
+
                 """.trimIndent(),
             )
         }
@@ -40,6 +47,15 @@ class IntegrationTest {
                 plugins {
                     id("java-library")
                     id("io.github.usefulness.maven-sympathy")
+                }
+                
+                tasks.withType(Test).configureEach {
+                    useJUnitPlatform()
+                }
+                
+                dependencies {
+                    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+                    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.2")
                 }
                 """.trimIndent(),
             )
@@ -96,6 +112,6 @@ class IntegrationTest {
         }
         val result = runGradle(projectDir = rootDirectory, shouldFail = true)
 
-        assertThat(result.output).contains("com.squareup.okhttp3:okhttp:3.14.8 changed to 3.14.9")
+        assertThat(result.output).contains("com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9")
     }
 }

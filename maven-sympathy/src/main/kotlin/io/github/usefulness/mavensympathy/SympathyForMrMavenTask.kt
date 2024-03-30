@@ -27,20 +27,26 @@ public open class SympathyForMrMavenTask @Inject constructor(objectFactory: Obje
     public fun run() {
         var fail = false
         configurationWithDependencies.get().forEach { (name, root) ->
-            root.dependencies.filterIsInstance<ResolvedDependencyResult>().forEach { rdr ->
-                val requested = rdr.requested as? ModuleComponentSelector ?: return@forEach
-                val selected = rdr.selected
-                val requestedVersion = requested.version
-                val selectedVersion = selected.moduleVersion?.version
-                if (requestedVersion != selectedVersion) {
-                    logger.error("[$name] requested: $requested changed to $selectedVersion")
-                    fail = true
+            root.dependencies.asSequence()
+                .filterIsInstance<ResolvedDependencyResult>()
+                .filter { it.requested is ModuleComponentSelector }
+                .forEach { rdr ->
+                    val requested = rdr.requested as? ModuleComponentSelector
+                    val selected = rdr.selected
+                    val requestedVersion = requested?.version
+                    val selectedVersion = selected.moduleVersion?.version
+                    if (!requestedVersion.isNullOrBlank() && requestedVersion != selectedVersion) {
+                        logger.error("[$name] dependency $requested version changed $requestedVersion -> $selectedVersion")
+                        fail = true
+                    }
                 }
-            }
         }
+        val report = outputFile.get().asFile
         if (fail) {
+            report.writeText("NOT OK")
             error("Declared dependencies were upgraded transitively. See task output above. Please update their versions.")
+        } else {
+            report.writeText("OK")
         }
-        outputFile.get().asFile.writeText("OK")
     }
 }
