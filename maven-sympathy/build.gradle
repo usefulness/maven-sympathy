@@ -34,8 +34,6 @@ gradlePlugin {
 }
 
 dependencies {
-    compileOnly(libs.kotlin.gradle.api)
-
     testRuntimeOnly(libs.junit.platform.launcher)
     testRuntimeOnly(libs.junit.jupiter.engine)
 

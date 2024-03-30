@@ -9,12 +9,11 @@ public class MavenSympathyPlugin : Plugin<Project> {
     override fun apply(target: Project): Unit = with(target) {
         val reportingExtension = extensions.getByType(ReportingExtension::class.java)
         val task = tasks.register("sympathyForMrMaven", SympathyForMrMavenTask::class.java) {
-            outputFile.set(reportingExtension.baseDirectory.map { it.dir("sympathyForMrMaven").file("output.txt") })
+            outputFile.set(reportingExtension.baseDirectory.map { it.dir(name).file("output.txt") })
         }
-        configurations.configureEach {
-            if (!isCanBeResolved) return@configureEach
-
+        configurations.matching { it.isCanBeResolved }.configureEach {
             task.configure {
+                if (!isCanBeResolved) return@configure
                 configurationWithDependencies.put(this@configureEach.name, incoming.resolutionResult.rootComponent)
             }
         }
