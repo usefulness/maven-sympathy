@@ -6,7 +6,6 @@ import org.gradle.api.artifacts.result.ResolvedComponentResult
 import org.gradle.api.artifacts.result.ResolvedDependencyResult
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
@@ -26,9 +25,6 @@ public open class SympathyForMrMavenTask @Inject constructor(objectFactory: Obje
     public val outputFile: RegularFileProperty = objectFactory.fileProperty()
 
     @Input
-    public val excludedConfigurations: ListProperty<String> = objectFactory.listProperty(String::class.java)
-
-    @Input
     public val behaviorOnFailure: Property<BehaviorOnFailure> = objectFactory.property(BehaviorOnFailure::class.java)
         .value(BehaviorOnFailure.Fail)
 
@@ -40,9 +36,8 @@ public open class SympathyForMrMavenTask @Inject constructor(objectFactory: Obje
     public fun run() {
         var fail = false
         val errorMessages = mutableListOf<String>()
-        val excludedNames = excludedConfigurations.orElse(emptyList()).get()
 
-        configurationWithDependencies.get().filterNot { (name, _) -> name in excludedNames }.forEach { (name, root) ->
+        configurationWithDependencies.get().forEach { (name, root) ->
             root.dependencies.asSequence()
                 .filterIsInstance<ResolvedDependencyResult>()
                 .filter { it.requested is ModuleComponentSelector }

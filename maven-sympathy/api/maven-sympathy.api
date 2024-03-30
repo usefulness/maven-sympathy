@@ -17,7 +17,6 @@ public class io/github/usefulness/mavensympathy/SympathyForMrMavenTask : org/gra
 	public final fun behaviorOnFailure (Ljava/lang/String;)V
 	public final fun getBehaviorOnFailure ()Lorg/gradle/api/provider/Property;
 	public final fun getConfigurationWithDependencies ()Lorg/gradle/api/provider/MapProperty;
-	public final fun getExcludedConfigurations ()Lorg/gradle/api/provider/ListProperty;
 	public final fun getOutputFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public final fun run ()V
 }

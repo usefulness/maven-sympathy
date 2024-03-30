@@ -138,6 +138,7 @@ class IntegrationTest {
                 }
                 
                 tasks.named("sympathyForMrMaven") {
+                    behaviorOnFailure "fail"
                     behaviorOnFailure = BehaviorOnFailure.Warn
                 }
                 
@@ -160,33 +161,5 @@ class IntegrationTest {
                 [testRuntimeClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
                 """.trimIndent(),
             )
-    }
-
-    @Test
-    fun exclude() {
-        rootDirectory.resolve("build.gradle") {
-            // language=groovy
-            writeText(
-                """
-                plugins {
-                    id("java-library")
-                    id("io.github.usefulness.maven-sympathy")
-                }
-                
-                tasks.named("sympathyForMrMaven") {
-                    excludedConfigurations = ["compileClasspath", "runtimeClasspath", "testCompileClasspath", "testRuntimeClasspath"]
-                    behaviorOnFailure "fail"
-                }
-                
-                dependencies {
-                    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-                    implementation("com.squareup.okhttp3:okhttp:3.14.8")
-                }
-                """.trimIndent(),
-            )
-        }
-        val result = runGradle(projectDir = rootDirectory)
-
-        assertThat(result.output).doesNotContain("changed to")
     }
 }
