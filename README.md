@@ -30,7 +30,7 @@ From now on, the `sympathyForMrMaven` will run on every `check` task invocation.
 
 ```groovy
 tasks.named("sympathyForMrMaven") {
-    behaviorOnFailure = BehaviorOnFailure.Fail
+    behaviorOnMismatch = BehaviorOnMismatch.Fail
 }
 ```
 </details>
@@ -40,9 +40,9 @@ tasks.named("sympathyForMrMaven") {
 
 ```kotlin
 tasks.named<io.github.usefulness.mavensympathy.SympathyForMrMavenTask>("sympathyForMrMaven") {
-    behaviorOnFailure = BehaviorOnFailure.Fail
+    behaviorOnMismatch = BehaviorOnMismatch.Fail
 }
 ```
 </details>
 
-`behaviorOnFailure` - one of `Fail` (prints error logs + fails the build) or `Warn` (only prints error logs)  
+`behaviorOnMismatch` - one of `Fail` (prints error logs + fails the build) or `Warn` (only prints error logs)  
