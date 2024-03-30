@@ -1,3 +1,11 @@
+public final class io/github/usefulness/mavensympathy/BehaviorOnFailure : java/lang/Enum {
+	public static final field Fail Lio/github/usefulness/mavensympathy/BehaviorOnFailure;
+	public static final field Warn Lio/github/usefulness/mavensympathy/BehaviorOnFailure;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/usefulness/mavensympathy/BehaviorOnFailure;
+	public static fun values ()[Lio/github/usefulness/mavensympathy/BehaviorOnFailure;
+}
+
 public final class io/github/usefulness/mavensympathy/MavenSympathyPlugin : org/gradle/api/Plugin {
 	public fun <init> ()V
 	public synthetic fun apply (Ljava/lang/Object;)V
@@ -6,7 +14,10 @@ public final class io/github/usefulness/mavensympathy/MavenSympathyPlugin : org/
 
 public class io/github/usefulness/mavensympathy/SympathyForMrMavenTask : org/gradle/api/DefaultTask {
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun behaviorOnFailure (Ljava/lang/String;)V
+	public final fun getBehaviorOnFailure ()Lorg/gradle/api/provider/Property;
 	public final fun getConfigurationWithDependencies ()Lorg/gradle/api/provider/MapProperty;
+	public final fun getExcludedConfigurations ()Lorg/gradle/api/provider/ListProperty;
 	public final fun getOutputFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public final fun run ()V
 }
