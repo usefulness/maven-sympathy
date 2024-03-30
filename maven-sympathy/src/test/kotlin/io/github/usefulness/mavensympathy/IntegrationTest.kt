@@ -177,7 +177,7 @@ class IntegrationTest {
             // language=groovy
             writeText(
                 """
-                import io.github.usefulness.mavensympathy.BehaviorOnFailure 
+                import io.github.usefulness.mavensympathy.BehaviorOnMismatch 
                 
                 plugins {
                     id("java-library")
@@ -185,8 +185,8 @@ class IntegrationTest {
                 }
                 
                 tasks.named("sympathyForMrMaven") {
-                    behaviorOnFailure "fail"
-                    behaviorOnFailure = BehaviorOnFailure.Warn
+                    behaviorOnMismatch "fail"
+                    behaviorOnMismatch = BehaviorOnMismatch.Warn
                 }
                 
                 dependencies {

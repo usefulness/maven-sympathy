@@ -1,6 +1,6 @@
 package io.github.usefulness.mavensympathy
 
-public enum class BehaviorOnFailure {
+public enum class BehaviorOnMismatch {
     Warn,
     Fail,
 }

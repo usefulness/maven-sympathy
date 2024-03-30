@@ -25,11 +25,11 @@ public open class SympathyForMrMavenTask @Inject constructor(objectFactory: Obje
     public val outputFile: RegularFileProperty = objectFactory.fileProperty()
 
     @Input
-    public val behaviorOnFailure: Property<BehaviorOnFailure> = objectFactory.property(BehaviorOnFailure::class.java)
-        .value(BehaviorOnFailure.Fail)
+    public val behaviorOnMismatch: Property<BehaviorOnMismatch> = objectFactory.property(BehaviorOnMismatch::class.java)
+        .value(BehaviorOnMismatch.Fail)
 
-    public fun behaviorOnFailure(value: String) {
-        behaviorOnFailure.set(BehaviorOnFailure.entries.first { it.name.equals(value, ignoreCase = true) })
+    public fun behaviorOnMismatch(value: String) {
+        behaviorOnMismatch.set(BehaviorOnMismatch.entries.first { it.name.equals(value, ignoreCase = true) })
     }
 
     @TaskAction
@@ -56,9 +56,9 @@ public open class SympathyForMrMavenTask @Inject constructor(objectFactory: Obje
             report.writeText(errorMessages.joinToString(separator = "\n"))
             val failureMessage = "Declared dependencies were upgraded transitively. See task output above. Please update their versions."
 
-            when (behaviorOnFailure.get()) {
-                BehaviorOnFailure.Warn -> logger.error(failureMessage)
-                BehaviorOnFailure.Fail, null -> error(failureMessage)
+            when (behaviorOnMismatch.get()) {
+                BehaviorOnMismatch.Warn -> logger.error(failureMessage)
+                BehaviorOnMismatch.Fail, null -> error(failureMessage)
             }
         } else {
             report.writeText("OK")
