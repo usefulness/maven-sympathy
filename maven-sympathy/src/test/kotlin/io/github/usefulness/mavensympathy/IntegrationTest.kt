@@ -113,5 +113,80 @@ class IntegrationTest {
         val result = runGradle(projectDir = rootDirectory, shouldFail = true)
 
         assertThat(result.output).contains("com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9")
+        assertThat(rootDirectory.resolve("build/reports/sympathyForMrMaven/output.txt")).content()
+            .isEqualToIgnoringWhitespace(
+                """
+                [compileClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
+                [runtimeClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
+                [testCompileClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
+                [testRuntimeClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
+                """.trimIndent(),
+            )
+    }
+
+    @Test
+    fun warningOnly() {
+        rootDirectory.resolve("build.gradle") {
+            // language=groovy
+            writeText(
+                """
+                import io.github.usefulness.mavensympathy.BehaviorOnFailure 
+                
+                plugins {
+                    id("java-library")
+                    id("io.github.usefulness.maven-sympathy")
+                }
+                
+                tasks.named("sympathyForMrMaven") {
+                    behaviorOnFailure = BehaviorOnFailure.Warn
+                }
+                
+                dependencies {
+                    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+                    implementation("com.squareup.okhttp3:okhttp:3.14.8")
+                }
+                """.trimIndent(),
+            )
+        }
+        val result = runGradle(projectDir = rootDirectory)
+
+        assertThat(result.output).contains("com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9")
+        assertThat(rootDirectory.resolve("build/reports/sympathyForMrMaven/output.txt")).content()
+            .isEqualToIgnoringWhitespace(
+                """
+                [compileClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
+                [runtimeClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
+                [testCompileClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
+                [testRuntimeClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
+                """.trimIndent(),
+            )
+    }
+
+    @Test
+    fun exclude() {
+        rootDirectory.resolve("build.gradle") {
+            // language=groovy
+            writeText(
+                """
+                plugins {
+                    id("java-library")
+                    id("io.github.usefulness.maven-sympathy")
+                }
+                
+                tasks.named("sympathyForMrMaven") {
+                    excludedConfigurations = ["compileClasspath", "runtimeClasspath", "testCompileClasspath", "testRuntimeClasspath"]
+                    behaviorOnFailure "fail"
+                }
+                
+                dependencies {
+                    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+                    implementation("com.squareup.okhttp3:okhttp:3.14.8")
+                }
+                """.trimIndent(),
+            )
+        }
+        val result = runGradle(projectDir = rootDirectory)
+
+        assertThat(result.output).doesNotContain("changed to")
     }
 }
