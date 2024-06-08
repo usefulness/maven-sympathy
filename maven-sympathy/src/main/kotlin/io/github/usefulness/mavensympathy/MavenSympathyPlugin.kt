@@ -4,8 +4,8 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.publish.PublishingExtension
-import org.gradle.api.publish.internal.component.FeatureConfigurationVariant
-import org.gradle.api.publish.maven.internal.publication.DefaultMavenPublication
+import org.gradle.api.publish.internal.PublicationInternal
+import org.gradle.api.publish.internal.component.ResolutionBackedVariant
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.TaskProvider
 
@@ -54,13 +54,13 @@ public class MavenSympathyPlugin : Plugin<Project> {
         pluginManager.withPlugin("maven-publish") {
             logger.info("[maven-sympathy] registering hooks for published configurations")
             extensions.getByType(PublishingExtension::class.java).publications.configureEach {
-                if (this !is DefaultMavenPublication) return@configureEach logger.info("[maven-sympathy] Ignoring publication=$name")
+                if (this !is PublicationInternal<*>) return@configureEach logger.info("[maven-sympathy] Ignoring publication=$name")
 
                 val publicationName = name
                 task.configure {
                     val component = component.getOrNull()
                         ?: return@configure logger.info("[maven-sympathy] Missing component for publication=$publicationName")
-                    val configurationVariants = component.usages.filterIsInstance<FeatureConfigurationVariant>()
+                    val configurationVariants = component.usages.filterIsInstance<ResolutionBackedVariant>()
                     if (configurationVariants.isEmpty()) {
                         return@configure logger.info("[maven-sympathy] Could not find configurations for publication=$publicationName")
                     }
