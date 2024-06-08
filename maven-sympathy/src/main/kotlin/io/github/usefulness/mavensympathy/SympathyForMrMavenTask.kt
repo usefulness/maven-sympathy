@@ -15,8 +15,8 @@ import javax.inject.Inject
 
 public open class SympathyForMrMavenTask @Inject constructor(objectFactory: ObjectFactory) : DefaultTask() {
 
-    @Input
-    public val configurationWithDependencies: MapProperty<String, ResolvedComponentResult> = objectFactory.mapProperty(
+    @get:Input
+    internal val configurationsWithDependencies: MapProperty<String, ResolvedComponentResult> = objectFactory.mapProperty(
         String::class.java,
         ResolvedComponentResult::class.java,
     )
@@ -37,14 +37,21 @@ public open class SympathyForMrMavenTask @Inject constructor(objectFactory: Obje
         var fail = false
         val errorMessages = mutableListOf<String>()
 
-        configurationWithDependencies.get().forEach { (name, root) ->
+        val configurations = configurationsWithDependencies.get()
+        if (configurations.isEmpty()) {
+            logger.warn("[maven-sympathy] No configurations detected!")
+        } else {
+            logger.info("[maven-sympathy] Running against: ${configurations.keys.joinToString(separator = ", ")}")
+        }
+
+        configurations.forEach { (name, root) ->
             root.dependencies.filterIsInstance<ResolvedDependencyResult>().forEach perDependency@{ rdr ->
                 val requested = rdr.requested as? ModuleComponentSelector ?: return@perDependency
                 val selected = rdr.selected
                 val requestedVersion = requested.version
                 val selectedVersion = selected.moduleVersion?.version
                 if (!requestedVersion.isNullOrBlank() && requestedVersion != selectedVersion) {
-                    val errorMessage = "[$name] dependency $requested version changed $requestedVersion -> $selectedVersion"
+                    val errorMessage = "[$name] dependency $requested version changed: $requestedVersion → $selectedVersion"
                     errorMessages.add(errorMessage)
                     logger.error(errorMessage)
                     fail = true

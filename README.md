@@ -25,6 +25,40 @@ usefulness-maven-sympathy = { id = "io.github.usefulness.maven-sympathy", versio
 From now on, the `sympathyForMrMaven` will run on every `check` task invocation. 
 
 #### Advanced configuration
+
+###### Customize plugin behavior
+
+Configurable via `io.github.usefulness.mavensympathy.MavenSympathyExtension` extension.
+
+<details open>
+<summary>Groovy</summary>
+
+```groovy
+mavenSympathy {
+    attachStrategy = io.github.usefulness.mavensympathy.AttachStrategy.Default
+}
+```
+</details>
+
+<details>
+<summary>Kotlin</summary>
+
+```kotlin
+mavenSympathy {
+    attachStrategy = io.github.usefulness.mavensympathy.AttachStrategy.Default
+}
+```
+</details>
+
+- `attachStrategy` - Defines how the plugin will hook up with the project to listen for version mismatches. Has to be one of:  
+   - `WatchAllResolvableConfigurations` - the plugin will check all resolvable configurations for versions mismatch 
+   - `ExtractFromMavenPublishComponents` - the plugin will only watch configurations attached to SoftwareComponents  
+     The implementation relies on internal gradle APIs and may break in the future Gradle versions.
+   - `Default` - if `maven-publish` is present, the plugin will behave as `ExtractFromMavenPublishComponents`, if not it will fall back to `WatchAllResolvableConfigurations` behavior.   
+      The behavior is subject to change, but the assumption is it should cover most common setups. 
+
+
+###### Customize task behavior
 <details open>
 <summary>Groovy</summary>
 
@@ -45,4 +79,4 @@ tasks.named<io.github.usefulness.mavensympathy.SympathyForMrMavenTask>("sympathy
 ```
 </details>
 
-`behaviorOnMismatch` - one of `Fail` (prints error logs + fails the build) or `Warn` (only prints error logs)  
+`behaviorOnMismatch` - one of `Fail` (prints error logs + fails the build) or `Warn` (only prints error logs)

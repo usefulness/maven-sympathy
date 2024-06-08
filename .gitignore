@@ -10,3 +10,4 @@ TODO.md
 .gradle/
 build/
 local.properties
+.kotlin

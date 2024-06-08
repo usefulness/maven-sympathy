@@ -1,9 +1,23 @@
+public final class io/github/usefulness/mavensympathy/AttachStrategy : java/lang/Enum {
+	public static final field Default Lio/github/usefulness/mavensympathy/AttachStrategy;
+	public static final field ExtractFromMavenPublishComponents Lio/github/usefulness/mavensympathy/AttachStrategy;
+	public static final field WatchAllResolvableConfigurations Lio/github/usefulness/mavensympathy/AttachStrategy;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lio/github/usefulness/mavensympathy/AttachStrategy;
+	public static fun values ()[Lio/github/usefulness/mavensympathy/AttachStrategy;
+}
+
 public final class io/github/usefulness/mavensympathy/BehaviorOnMismatch : java/lang/Enum {
 	public static final field Fail Lio/github/usefulness/mavensympathy/BehaviorOnMismatch;
 	public static final field Warn Lio/github/usefulness/mavensympathy/BehaviorOnMismatch;
 	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lio/github/usefulness/mavensympathy/BehaviorOnMismatch;
 	public static fun values ()[Lio/github/usefulness/mavensympathy/BehaviorOnMismatch;
+}
+
+public class io/github/usefulness/mavensympathy/MavenSympathyExtension {
+	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
+	public final fun getAttachStrategy ()Lorg/gradle/api/provider/Property;
 }
 
 public final class io/github/usefulness/mavensympathy/MavenSympathyPlugin : org/gradle/api/Plugin {
@@ -16,7 +30,6 @@ public class io/github/usefulness/mavensympathy/SympathyForMrMavenTask : org/gra
 	public fun <init> (Lorg/gradle/api/model/ObjectFactory;)V
 	public final fun behaviorOnMismatch (Ljava/lang/String;)V
 	public final fun getBehaviorOnMismatch ()Lorg/gradle/api/provider/Property;
-	public final fun getConfigurationWithDependencies ()Lorg/gradle/api/provider/MapProperty;
 	public final fun getOutputFile ()Lorg/gradle/api/file/RegularFileProperty;
 	public final fun run ()V
 }
