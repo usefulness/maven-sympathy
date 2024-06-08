@@ -35,6 +35,8 @@ public class MavenSympathyPlugin : Plugin<Project> {
                     }
                 }
             }
+
+            pluginExtension.attachStrategy.finalizeValue()
         }
 
         tasks.named("check") { dependsOn("sympathyForMrMaven") }
