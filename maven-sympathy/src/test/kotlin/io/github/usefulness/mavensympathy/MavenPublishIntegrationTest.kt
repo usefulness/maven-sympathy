@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
 import java.io.File
 
-class IntegrationTest {
+class MavenPublishIntegrationTest {
 
     @TempDir
     lateinit var rootDirectory: File
@@ -46,7 +46,16 @@ class IntegrationTest {
                 """
                 plugins {
                     id("java-library")
+                    id("maven-publish")
                     id("io.github.usefulness.maven-sympathy")
+                }
+                
+                publishing {
+                    publications {
+                        mavenJava(MavenPublication) {
+                            from components.java
+                        }
+                    }
                 }
                 
                 tasks.withType(Test).configureEach {
@@ -77,7 +86,16 @@ class IntegrationTest {
                 """
                 plugins {
                     id("java-library")
+                    id("maven-publish")
                     id("io.github.usefulness.maven-sympathy")
+                }
+                
+                publishing {
+                    publications {
+                        mavenJava(MavenPublication) {
+                            from components.java
+                        }
+                    }
                 }
                 
                 dependencies {
@@ -90,7 +108,7 @@ class IntegrationTest {
             )
         }
         val result = runGradle(projectDir = rootDirectory, shouldFail = true)
-        assertThat(result.output).contains("dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9")
+        assertThat(result.output).contains("dependency com.squareup.okhttp3:okhttp:3.14.8 version changed: 3.14.8 → 3.14.9")
         assertThat(result.task(":sympathyForMrMaven")?.outcome).isEqualTo(TaskOutcome.FAILED)
 
         rootDirectory.resolve("build.gradle") {
@@ -99,7 +117,16 @@ class IntegrationTest {
                 """
                 plugins {
                     id("java-library")
+                    id("maven-publish")
                     id("io.github.usefulness.maven-sympathy")
+                }
+                
+                publishing {
+                    publications {
+                        mavenJava(MavenPublication) {
+                            from components.java
+                        }
+                    }
                 }
                 
                 dependencies {
@@ -124,7 +151,16 @@ class IntegrationTest {
                 """
                 plugins {
                     id("java-library")
+                    id("maven-publish")
                     id("io.github.usefulness.maven-sympathy")
+                }
+                
+                publishing {
+                    publications {
+                        mavenJava(MavenPublication) {
+                            from components.java
+                        }
+                    }
                 }
                 
                 dependencies {
@@ -147,7 +183,16 @@ class IntegrationTest {
                 """
                 plugins {
                     id("java-library")
+                    id("maven-publish")
                     id("io.github.usefulness.maven-sympathy")
+                }
+                
+                publishing {
+                    publications {
+                        mavenJava(MavenPublication) {
+                            from components.java
+                        }
+                    }
                 }
                 
                 dependencies {
@@ -159,14 +204,12 @@ class IntegrationTest {
         }
         val result = runGradle(projectDir = rootDirectory, shouldFail = true)
 
-        assertThat(result.output).contains("com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9")
+        assertThat(result.output).contains("com.squareup.okhttp3:okhttp:3.14.8 version changed: 3.14.8 → 3.14.9")
         assertThat(rootDirectory.resolve("build/reports/sympathyForMrMaven/output.txt")).content()
             .isEqualToIgnoringWhitespace(
                 """
-                [compileClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
-                [runtimeClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
-                [testCompileClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
-                [testRuntimeClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
+                [compileClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed: 3.14.8 → 3.14.9
+                [runtimeClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed: 3.14.8 → 3.14.9
                 """.trimIndent(),
             )
     }
@@ -181,7 +224,16 @@ class IntegrationTest {
                 
                 plugins {
                     id("java-library")
+                    id("maven-publish")
                     id("io.github.usefulness.maven-sympathy")
+                }
+                
+                publishing {
+                    publications {
+                        mavenJava(MavenPublication) {
+                            from components.java
+                        }
+                    }
                 }
                 
                 tasks.named("sympathyForMrMaven") {
@@ -198,14 +250,12 @@ class IntegrationTest {
         }
         val result = runGradle(projectDir = rootDirectory)
 
-        assertThat(result.output).contains("com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9")
+        assertThat(result.output).contains("com.squareup.okhttp3:okhttp:3.14.8 version changed: 3.14.8 → 3.14.9")
         assertThat(rootDirectory.resolve("build/reports/sympathyForMrMaven/output.txt")).content()
             .isEqualToIgnoringWhitespace(
                 """
-                [compileClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
-                [runtimeClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
-                [testCompileClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
-                [testRuntimeClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed 3.14.8 -> 3.14.9
+                [compileClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed: 3.14.8 → 3.14.9
+                [runtimeClasspath] dependency com.squareup.okhttp3:okhttp:3.14.8 version changed: 3.14.8 → 3.14.9
                 """.trimIndent(),
             )
     }
