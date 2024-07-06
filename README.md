@@ -24,6 +24,19 @@ usefulness-maven-sympathy = { id = "io.github.usefulness.maven-sympathy", versio
 
 From now on, the `sympathyForMrMaven` will run on every `check` task invocation. 
 
+```
+[compileClasspath] dependency org.jetbrains.kotlin:kotlin-stdlib:1.9.22 version changed: 1.9.22 → 1.9.23
+[runtimeClasspath] dependency org.jetbrains.kotlin:kotlin-stdlib:1.9.22 version changed: 1.9.22 → 1.9.23
+> Task :sympathyForMrMaven FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+
+Execution failed for task ':sympathyForMrMaven'.
+> Declared dependencies were upgraded transitively. See task output above. Please update their versions.
+```
+
 #### Advanced configuration
 
 ###### Customize plugin behavior
