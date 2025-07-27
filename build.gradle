@@ -8,7 +8,7 @@ commonConfig {
     javaVersion JavaVersion.VERSION_1_8
 }
 
-allprojects {
+subprojects.forEach {
     pluginManager.withPlugin("kotlin") { plugin ->
         kotlin {
             jvmToolchain(libs.versions.java.compilation.get().toInteger())

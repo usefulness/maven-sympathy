@@ -1,25 +1,30 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
 
 plugins {
     id("java-gradle-plugin")
     alias(libs.plugins.starter.library.kotlin)
+    alias(libs.plugins.kotlin.samwithreceiver)
 }
+
+
+def targetJavaVersion = JavaVersion.VERSION_11
 
 kotlin {
     jvmToolchain(libs.versions.java.compilation.get().toInteger())
+    compilerOptions.jvmTarget = JvmTarget.fromTarget(targetJavaVersion.toString())
 }
 
-def targetJavaVersion = JavaVersion.VERSION_11
+samWithReceiver {
+    annotation("org.gradle.api.HasImplicitReceiver")
+}
+
 tasks.withType(JavaCompile).configureEach {
     options.release.set(targetJavaVersion.majorVersion.toInteger())
 }
-tasks.withType(KotlinCompile).configureEach {
-    it.compilerOptions.jvmTarget = JvmTarget.@Companion.fromTarget(targetJavaVersion.toString())
-}
 
 dependencies {
-    implementation libs.jetbrains.dokka
+    implementation(libs.vanniktech.maven.publish)
+    implementation(libs.jetbrains.dokka)
 }
 
 gradlePlugin {
