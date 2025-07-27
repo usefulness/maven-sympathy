@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+
 plugins {
     id("java-gradle-plugin")
     alias(libs.plugins.gradle.pluginpublish)
@@ -13,6 +15,10 @@ samWithReceiver {
 
 kotlin {
     explicitApi()
+    compilerOptions {
+        apiVersion = KotlinVersion.KOTLIN_2_0
+        languageVersion = KotlinVersion.KOTLIN_2_0
+    }
 }
 
 tasks.withType(Test).configureEach {
