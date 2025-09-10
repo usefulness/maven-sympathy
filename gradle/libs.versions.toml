@@ -2,7 +2,7 @@
 java-compilation = "21"
 gradle-starter = "0.89.0"
 gradle-pluginpublish = "2.0.0"
-maven-kotlin = "2.2.10"
+maven-kotlin = "2.2.20"
 maven-junit = "5.13.4"
 maven-assertj = "3.27.4"
 maven-binarycompatiblity = "0.18.1"
