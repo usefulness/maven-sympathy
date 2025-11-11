@@ -14,7 +14,7 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "maven-assertj" }
 jetbrains-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "maven-dokka" }
-vanniktech-maven-publish = "com.vanniktech:gradle-maven-publish-plugin:0.34.0"
+vanniktech-maven-publish = "com.vanniktech:gradle-maven-publish-plugin:0.35.0"
 
 [plugins]
 starter-config = { id = "com.starter.config", version.ref = "gradle-starter" }
