@@ -1,9 +1,9 @@
 [versions]
-java-compilation = "21"
-gradle-starter = "0.91.0"
+java-compilation = "25"
+gradle-starter = "0.96.1"
 gradle-pluginpublish = "2.1.1"
 maven-kotlin = "2.4.0"
-maven-junit = "5.14.4"
+maven-junit = "6.1.1"
 maven-assertj = "3.27.7"
 maven-binarycompatiblity = "0.18.1"
 maven-dokka = "2.2.0"
@@ -14,7 +14,7 @@ junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", vers
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "maven-assertj" }
 jetbrains-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "maven-dokka" }
-vanniktech-maven-publish = "com.vanniktech:gradle-maven-publish-plugin:0.35.0"
+vanniktech-maven-publish = "com.vanniktech:gradle-maven-publish-plugin:0.37.0"
 
 [plugins]
 starter-config = { id = "com.starter.config", version.ref = "gradle-starter" }
