@@ -11,8 +11,10 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
+import org.gradle.work.DisableCachingByDefault
 import javax.inject.Inject
 
+@DisableCachingByDefault(because = "Not worth caching")
 public open class SympathyForMrMavenTask @Inject constructor(objectFactory: ObjectFactory) : DefaultTask() {
 
     @get:Input
