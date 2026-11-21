@@ -1,5 +1,5 @@
 [versions]
-java-compilation = "25"
+java-compilation = "27"
 gradle-starter = "0.100.0"
 gradle-pluginpublish = "2.2.1"
 maven-kotlin = "2.4.21"
