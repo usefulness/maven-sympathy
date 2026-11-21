@@ -17,6 +17,7 @@ samWithReceiver {
 dependencies {
     implementation(libs.vanniktech.maven.publish)
     implementation(libs.jetbrains.dokka)
+    compileOnly(libs.kotlin.gradle.plugin)
 }
 
 gradlePlugin {
@@ -24,6 +25,10 @@ gradlePlugin {
         publishingPlugin {
             id = 'com.starter.publishing'
             implementationClass = 'PublishingPlugin'
+        }
+        conventionsPlugin {
+            id = 'com.starter.conventions'
+            implementationClass = 'ConventionsPlugin'
         }
     }
 }

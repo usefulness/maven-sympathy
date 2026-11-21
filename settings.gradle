@@ -9,6 +9,12 @@ pluginManagement {
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+    id("com.starter.config") version "0.101.0"
+    id("com.starter.versioning") version "0.101.0"
+}
+
+commonConfig {
+    javaVersion JavaVersion.VERSION_1_8
 }
 
 dependencyResolutionManagement {

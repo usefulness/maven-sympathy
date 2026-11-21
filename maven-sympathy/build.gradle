@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlinx.binarycompatibility)
     alias(libs.plugins.kotlin.samwithreceiver)
     id("com.starter.publishing")
+    id("com.starter.conventions")
 }
 
 samWithReceiver {
